@@ -4,11 +4,11 @@ import math
 FONT = "Courier"
 BG_YELLOW = "#FFF7D1"
 FG_GREEN = "#79AC78"
-WORKING_MINUTES = 0.1
-SHORT_BREAK = 0.05
-LONG_BREAK = 0.05
-
+WORKING_MINUTES = 25
+SHORT_BREAK = 5
+LONG_BREAK = 20
 reps = 0
+timer = None
 
 
 window = Tk()
@@ -28,7 +28,6 @@ canvas.grid(column=1, row=1)
 
 def count_down(count):
 
-
     count_minutes = math.floor(count / 60)
     count_seconds = count % 60
 
@@ -37,7 +36,8 @@ def count_down(count):
 
     canvas.itemconfig(timer_text, text=f"{count_minutes}:{count_seconds}")
     if count > 0:
-        window.after(1000, count_down, count-1 )
+        global timer
+        timer = window.after(1000, count_down, count-1 )
     else:
         start_timer()
         progress_mark_text = ""
@@ -66,13 +66,20 @@ def start_timer():
         count_down(work_seconds)
         timer_label.config(text="Work!")
 
-
+def reset_timer():
+    global timer
+    global reps
+    reps = 0
+    window.after_cancel(timer)
+    timer_label.config(text="Timer")
+    canvas.itemconfig(timer_text, text="00:00")
+    progress_mark.config(text="")
 
 
 start_button = Button(text="START", font=(FONT, 35, "bold") ,bg=BG_YELLOW,highlightthickness=0, command=start_timer)
 start_button.grid(column=0, row=2)
 
-reset_button = Button(text="RESET", font=(FONT, 35, "bold"), bg=BG_YELLOW, highlightthickness=0 )
+reset_button = Button(text="RESET", font=(FONT, 35, "bold"), bg=BG_YELLOW, highlightthickness=0, command=reset_timer)
 reset_button.grid(column=2, row=2)
 
 progress_mark = Label( font=(FONT, 35, "bold"), bg=BG_YELLOW)
