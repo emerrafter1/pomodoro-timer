@@ -4,19 +4,16 @@ import math
 FONT = "Courier"
 BG_YELLOW = "#FFF7D1"
 FG_GREEN = "#79AC78"
-WORKING_MINUTES = 25
-SHORT_BREAK = 5
-LONG_BREAK = 20
+WORKING_MINUTES = 0.1
+SHORT_BREAK = 0.05
+LONG_BREAK = 0.05
 
 reps = 0
-
 
 
 window = Tk()
 window.title("Pomodoro Timer")
 window.config(padx=100, pady=50, bg=BG_YELLOW)
-
-
 
 timer_label = Label(text=f"Timer", font=(FONT, 70, "bold"), bg=BG_YELLOW, fg=FG_GREEN)
 timer_label.grid(column=1, row=0)
@@ -30,6 +27,8 @@ canvas.grid(column=1, row=1)
 
 
 def count_down(count):
+
+
     count_minutes = math.floor(count / 60)
     count_seconds = count % 60
 
@@ -41,6 +40,12 @@ def count_down(count):
         window.after(1000, count_down, count-1 )
     else:
         start_timer()
+        progress_mark_text = ""
+        completed_sessions = math.floor(reps/2)
+        for _ in range(completed_sessions):
+            progress_mark_text += "🍅"
+
+        progress_mark.config(text=progress_mark_text)
 
 
 def start_timer():
@@ -64,27 +69,14 @@ def start_timer():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 start_button = Button(text="START", font=(FONT, 35, "bold") ,bg=BG_YELLOW,highlightthickness=0, command=start_timer)
 start_button.grid(column=0, row=2)
 
-
-reset_button = Button(text="RESET", font=(FONT, 35, "bold"), bg=BG_YELLOW, highlightthickness=0)
+reset_button = Button(text="RESET", font=(FONT, 35, "bold"), bg=BG_YELLOW, highlightthickness=0 )
 reset_button.grid(column=2, row=2)
 
-check_mark = Label(text="🍅", font=(FONT, 35, "bold"), bg=BG_YELLOW)
-check_mark.grid(column=1, row=3)
+progress_mark = Label( font=(FONT, 35, "bold"), bg=BG_YELLOW)
+progress_mark.grid(column=1, row=3)
 
 
 
